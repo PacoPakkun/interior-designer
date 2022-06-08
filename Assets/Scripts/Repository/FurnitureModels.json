@@ -1,0 +1,170 @@
+﻿[
+  {
+    "name": "bed_1",
+    "type": 0
+  },
+  {
+    "name": "bed_2",
+    "type": 0
+  },
+  {
+    "name": "bed_3",
+    "type": 0
+  },
+  {
+    "name": "chair_1",
+    "type": 1
+  },
+  {
+    "name": "chair_2",
+    "type": 1
+  },
+  {
+    "name": "chair_3",
+    "type": 1
+  },
+  {
+    "name": "corner_sofa",
+    "type": 1
+  },
+  {
+    "name": "chair_4",
+    "type": 1
+  },
+  {
+    "name": "kitchen_chair_1",
+    "type": 1
+  },
+  {
+    "name": "kitchen_chair_2",
+    "type": 1
+  },
+  {
+    "name": "pouf",
+    "type": 1
+  },
+  {
+    "name": "sofa_1",
+    "type": 1
+  },
+  {
+    "name": "sofa_2",
+    "type": 1
+  },
+  {
+    "name": "sofa_3",
+    "type": 1
+  },
+  {
+    "name": "sofa_4",
+    "type": 1
+  },
+  {
+    "name": "coffee_table_2",
+    "type": 1
+  },
+  {
+    "name": "coffee_table_4",
+    "type": 2
+  },
+  {
+    "name": "kitchen_table_1",
+    "type": 2
+  },
+  {
+    "name": "kitchen_table_2",
+    "type": 2
+  },
+  {
+    "name": "table_1",
+    "type": 2
+  },
+  {
+    "name": "table_2",
+    "type": 2
+  },
+  {
+    "name": "washbasin",
+    "type": 3
+  },
+  {
+    "name": "cabinet_1",
+    "type": 3
+  },
+  {
+    "name": "cabinet_2",
+    "type": 3
+  },
+  {
+    "name": "cabinet_3",
+    "type": 3
+  },
+  {
+    "name": "flasket",
+    "type": 3
+  },
+  {
+    "name": "rack_1",
+    "type": 3
+  },
+  {
+    "name": "rack_2",
+    "type": 3
+  },
+  {
+    "name": "rack_3",
+    "type": 3
+  },
+  {
+    "name": "rack_4",
+    "type": 3
+  },
+  {
+    "name": "rack_5",
+    "type": 3
+  },
+  {
+    "name": "tv_table_1",
+    "type": 3
+  },
+  {
+    "name": "tv_table_2",
+    "type": 3
+  },
+  {
+    "name": "tv_table_3",
+    "type": 3
+  },
+  {
+    "name": "modular_kitchen_table_1",
+    "type": 3
+  },
+  {
+    "name": "modular_kitchen_table_2",
+    "type": 3
+  },
+  {
+    "name": "modular_kitchen_table_3",
+    "type": 3
+  },
+  {
+    "name": "coffee_table_1",
+    "type": 3
+  },
+  {
+    "name": "torchere_1",
+    "type": 4
+  },
+  {
+    "name": "torchere_2",
+    "type": 4
+  },
+  {
+    "name": "torchere_3",
+    "type": 4
+  },
+  {
+    "name": "torchere_4",
+    "type": 4
+  }
+]
