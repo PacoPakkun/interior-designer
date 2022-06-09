@@ -31,10 +31,12 @@ public class LoadFurniture : MonoBehaviour
         var parameters = new Parameters(numberOfFurnitureItems, numberOfIterations, populationSize, mutationChance,
             numberOfSelectedIndividuals, clearanceWeight, circulationWeight, pairwiseWeight, conversationWeight,
             anglesWeight, balanceWeight, furnitureAlignmentWeight, wallAlignmentWeight);
-        var solution = new GeneticAlgorithm(repository, parameters).GenerateSolution().Representation;
+        var solution = new GeneticAlgorithm(repository, parameters).GenerateSolution();
+        var representation = solution.Representation;
+        Debug.Log(solution.Fitness());
 
         // instantiate solution
-        foreach (var furnitureItem in solution)
+        foreach (var furnitureItem in representation)
         {
             var instance = furnitureItem.Instantiate();
             foreach (Transform child in instance)

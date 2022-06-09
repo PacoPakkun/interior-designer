@@ -90,7 +90,7 @@ namespace Service
         // chance to make a random change to a furniture alignment
         public void Mutation()
         {
-            if (!(Random.value < _parameters.MutationChance))
+            if (Random.value > _parameters.MutationChance)
                 return;
 
             var pos = Random.Range(0, _parameters.NumberOfFurnitureItems);

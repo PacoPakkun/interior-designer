@@ -328,17 +328,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfFurnitureItems: 7
-  numberOfIterations: 150
-  populationSize: 15
+  numberOfIterations: 100
+  populationSize: 40
   mutationChance: 0.6
   numberOfSelectedIndividuals: 5
-  clearanceWeight: 0.8
-  circulationWeight: 0.6
+  clearanceWeight: 1
+  circulationWeight: 1
   pairwiseWeight: 1
-  conversationWeight: 0.7
-  anglesWeight: 0.8
-  balanceWeight: 0.7
-  furnitureAlignmentWeight: 0.7
+  conversationWeight: 1
+  anglesWeight: 1
+  balanceWeight: 1
+  furnitureAlignmentWeight: 1
   wallAlignmentWeight: 1
 --- !u!1 &705507993
 GameObject:

@@ -62,7 +62,8 @@ namespace Service
                 _population = newPopulationMutated;
             }
 
-            return _population.Aggregate((a, b) => a.Fitness() < b.Fitness() ? a : b);
+            return _population.Aggregate((a, b) =>
+                a.Fitness() < b.Fitness() ? a : b);
         }
 
         // tournament that selects the best chromosome of a random few
