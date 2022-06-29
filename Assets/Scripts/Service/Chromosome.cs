@@ -13,25 +13,22 @@ namespace Service
     {
         public List<FurnitureItem> Representation;
         private readonly DataSource _dataSource;
-        private readonly Parameters _parameters;
 
-        public Chromosome(DataSource dataSource, Parameters parameters)
+        public Chromosome(DataSource dataSource)
         {
             _dataSource = dataSource;
-            _parameters = parameters;
             Init();
         }
 
-        public Chromosome(DataSource dataSource, Parameters parameters, List<FurnitureItem> representation)
+        public Chromosome(DataSource dataSource, List<FurnitureItem> representation)
         {
             Representation = representation;
             _dataSource = dataSource;
-            _parameters = parameters;
         }
 
         public Chromosome Copy()
         {
-            return new Chromosome(_dataSource, _parameters, Representation.ToList());
+            return new Chromosome(_dataSource, Representation.ToList());
         }
 
         // initial random furniture alignment
@@ -44,10 +41,10 @@ namespace Service
             var table = _dataSource.Tables[Random.Range(0, _dataSource.Tables.Count)];
             var cabinet = _dataSource.Cabinets[Random.Range(0, _dataSource.Cabinets.Count)];
             var randomModels = new List<int>() {bed, seat1, seat2, table, cabinet};
-            for (var i = 5; i < _parameters.NumberOfFurnitureItems; i++)
+            for (var i = 5; i < Settings.NumberOfFurnitureItems; i++)
                 randomModels.Add(Random.Range(0, _dataSource.FurnitureModels.Count));
 
-            for (var i = 0; i < _parameters.NumberOfFurnitureItems; i++)
+            for (var i = 0; i < Settings.NumberOfFurnitureItems; i++)
             {
                 var furnitureItem = new FurnitureItem(_dataSource.FurnitureModels[randomModels[i]]);
                 furnitureItem.Randomize();
@@ -75,25 +72,25 @@ namespace Service
         //  crossover between 2 chromosomes overlapping at a random position
         public Chromosome Crossover(Chromosome otherChromosome)
         {
-            var pos = (int) (_parameters.NumberOfFurnitureItems * (0.4f * Random.value + 0.3f));
+            var pos = (int) (Settings.NumberOfFurnitureItems * (0.4f * Random.value + 0.3f));
             var oldRepresentation = Representation.ToList();
 
             Representation = Representation.GetRange(0, pos);
-            for (int i = pos; i < _parameters.NumberOfFurnitureItems; i++)
+            for (int i = pos; i < Settings.NumberOfFurnitureItems; i++)
                 Representation.Add(!DoesOverlap(otherChromosome.Representation[i])
                     ? otherChromosome.Representation[i].Copy()
                     : oldRepresentation[i].Copy());
 
-            return new Chromosome(_dataSource, _parameters, Representation.ToList());
+            return new Chromosome(_dataSource, Representation.ToList());
         }
 
         // chance to make a random change to a furniture alignment
         public void Mutation()
         {
-            if (Random.value > _parameters.MutationChance)
+            if (Random.value > Settings.MutationChance)
                 return;
 
-            var pos = Random.Range(0, _parameters.NumberOfFurnitureItems);
+            var pos = Random.Range(0, Settings.NumberOfFurnitureItems);
             var furnitureItem = Representation[pos].Copy();
             Representation.RemoveAt(pos);
 
@@ -133,14 +130,14 @@ namespace Service
         // calculates overall fitness of furniture layout
         public double Fitness()
         {
-            return ClearanceCost() * _parameters.ClearanceWeight +
-                   CirculationCost() * _parameters.CirculationWeight +
-                   PairwiseCost() * _parameters.PairwiseWeight +
-                   ConversationCost() * _parameters.ConversationWeight +
-                   AnglesCost() * _parameters.AnglesWeight +
-                   BalanceCost() * _parameters.BalanceWeight +
-                   FurnitureAlignmentCost() * _parameters.FurnitureAlignmentWeight +
-                   WallAlignmentCost() * _parameters.WallAlignmentWeight;
+            return ClearanceCost() * Settings.ClearanceWeight +
+                   CirculationCost() * Settings.CirculationWeight +
+                   PairwiseCost() * Settings.PairwiseWeight +
+                   ConversationCost() * Settings.ConversationWeight +
+                   AnglesCost() * Settings.AnglesWeight +
+                   BalanceCost() * Settings.BalanceWeight +
+                   FurnitureAlignmentCost() * Settings.FurnitureAlignmentWeight +
+                   WallAlignmentCost() * Settings.WallAlignmentWeight;
         }
 
         // calculates clearance cost for layout
@@ -161,9 +158,9 @@ namespace Service
         private float PairwiseCost()
         {
             var sum = 0f;
-            for (var i = 0; i < _parameters.NumberOfFurnitureItems - 1; i++)
+            for (var i = 0; i < Settings.NumberOfFurnitureItems - 1; i++)
             {
-                for (var j = i + 1; j < _parameters.NumberOfFurnitureItems; j++)
+                for (var j = i + 1; j < Settings.NumberOfFurnitureItems; j++)
                 {
                     var recommendedDistances = Representation[i].GetPairwiseDistance(Representation[j]);
                     if (recommendedDistances == null)
@@ -181,9 +178,9 @@ namespace Service
         private float ConversationCost()
         {
             var sum = 0f;
-            for (var i = 0; i < _parameters.NumberOfFurnitureItems - 1; i++)
+            for (var i = 0; i < Settings.NumberOfFurnitureItems - 1; i++)
             {
-                for (var j = i + 1; j < _parameters.NumberOfFurnitureItems; j++)
+                for (var j = i + 1; j < Settings.NumberOfFurnitureItems; j++)
                 {
                     var recommendedDistances = Representation[i].GetConversationDistance(Representation[j]);
                     if (recommendedDistances == null)
@@ -201,9 +198,9 @@ namespace Service
         private double AnglesCost()
         {
             double sum = 0;
-            for (var i = 0; i < _parameters.NumberOfFurnitureItems - 1; i++)
+            for (var i = 0; i < Settings.NumberOfFurnitureItems - 1; i++)
             {
-                for (var j = i + 1; j < _parameters.NumberOfFurnitureItems; j++)
+                for (var j = i + 1; j < Settings.NumberOfFurnitureItems; j++)
                 {
                     var recommendedConversationDistances = Representation[i].GetConversationDistance(Representation[j]);
                     var recommendedPairwiseDistances = Representation[i].GetPairwiseDistance(Representation[j]);

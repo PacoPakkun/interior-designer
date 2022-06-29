@@ -4,34 +4,21 @@ using Service;
 using UnityEngine;
 using Polygon = System.Collections.Generic.List<ClipperLib.IntPoint>;
 using Polygons = System.Collections.Generic.List<System.Collections.Generic.List<ClipperLib.IntPoint>>;
-using static Utils.Utils;
 
 public class LoadFurniture : MonoBehaviour
 {
-    public int numberOfFurnitureItems = 5;
-    public int numberOfIterations = 100;
-    public int populationSize = 50;
-    public double mutationChance = 0.5;
-    public int numberOfSelectedIndividuals = 3;
-    public double clearanceWeight = 1;
-    public double circulationWeight = 1;
-    public double pairwiseWeight = 1;
-    public double conversationWeight = 1;
-    public double anglesWeight = 1;
-    public double balanceWeight = 1;
-    public double furnitureAlignmentWeight = 1;
-    public double wallAlignmentWeight = 1;
+    private DataSource _repository;
 
     void Start()
     {
         // load materials and models
-        var repository = new DataSource();
+        _repository = new DataSource();
+
+        // generate room floor and walls
+        GenerateRoom();
 
         // generate solution with genetic algorithm
-        var parameters = new Parameters(numberOfFurnitureItems, numberOfIterations, populationSize, mutationChance,
-            numberOfSelectedIndividuals, clearanceWeight, circulationWeight, pairwiseWeight, conversationWeight,
-            anglesWeight, balanceWeight, furnitureAlignmentWeight, wallAlignmentWeight);
-        var solution = new GeneticAlgorithm(repository, parameters).GenerateSolution();
+        var solution = new GeneticAlgorithm(_repository).GenerateSolution();
         var representation = solution.Representation;
         Debug.Log(solution.Fitness());
 
@@ -41,7 +28,30 @@ public class LoadFurniture : MonoBehaviour
             var instance = furnitureItem.Instantiate();
             foreach (Transform child in instance)
                 child.GetComponent<Renderer>().material =
-                    repository.Materials[Random.Range(0, repository.Materials.Count)];
+                    _repository.Materials[Random.Range(0, _repository.Materials.Count)];
         }
+    }
+
+    private void GenerateRoom()
+    {
+        GameObject floor = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        floor.transform.localPosition = new Vector3(0, 0, 0);
+        floor.transform.localScale = new Vector3(Settings.Width, 0.01f, Settings.Depth);
+        floor.GetComponent<Renderer>().material = _repository.Materials[7];
+
+        GameObject wall1 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        wall1.transform.localPosition = new Vector3(0, 0.75f, Settings.Depth / 2);
+        wall1.transform.localScale = new Vector3(Settings.Width, 1.5f, 0.1f);
+        wall1.GetComponent<Renderer>().material = _repository.Materials[9];
+
+        GameObject wall2 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        wall2.transform.localPosition = new Vector3(-Settings.Width / 2, 0.75f, 0);
+        wall2.transform.localScale = new Vector3(0.1f, 1.5f, Settings.Depth);
+        wall2.GetComponent<Renderer>().material = _repository.Materials[9];
+
+        GameObject wall3 = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        wall3.transform.localPosition = new Vector3(Settings.Width / 2, 0.75f, 0);
+        wall3.transform.localScale = new Vector3(0.1f, 1.5f, Settings.Depth);
+        wall3.GetComponent<Renderer>().material = _repository.Materials[9];
     }
 }

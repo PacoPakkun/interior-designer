@@ -27,8 +27,7 @@ namespace Repository
             var materialPaths = new List<string>()
             {
                 "base_material", "base_material 2", "cloth_1", "cloth_2", "cloth_3", "cloth_4", "floor", "wood_1",
-                "wood_2",
-                "wood_3", "wood_4"
+                "wood_2", "wood_3", "wood_4"
             };
             foreach (var path in materialPaths)
             {

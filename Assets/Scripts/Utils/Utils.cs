@@ -45,7 +45,6 @@ namespace Utils
             return angle * 180 / Math.PI;
         }
 
-
         // vertices of polygon after rotation by angle
         public static Polygon GetRotatedRectangle(Rect rectangle, float angle)
         {
@@ -120,10 +119,10 @@ namespace Utils
 
             Polygon roomPolygon = new Polygon()
             {
-                new IntPoint((long) (-3.5f * 1000000), (long) (-2.5f * 1000000)),
-                new IntPoint((long) (3.5f * 1000000), (long) (-2.5f * 1000000)),
-                new IntPoint((long) (3.5f * 1000000), (long) (2.5f * 1000000)),
-                new IntPoint((long) (-3.5f * 1000000), (long) (2.5f * 1000000)),
+                new IntPoint((long) (-Settings.Width / 2 * 1000000), (long) (-Settings.Depth / 2 * 1000000)),
+                new IntPoint((long) (Settings.Width / 2 * 1000000), (long) (-Settings.Depth / 2 * 1000000)),
+                new IntPoint((long) (Settings.Width / 2 * 1000000), (long) (Settings.Depth / 2 * 1000000)),
+                new IntPoint((long) (-Settings.Width / 2 * 1000000), (long) (Settings.Depth / 2 * 1000000)),
             };
 
             Clipper c = new Clipper();

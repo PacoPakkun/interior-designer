@@ -42,9 +42,14 @@ namespace Model
         {
             Angle = Random.Range(0f, 90f);
             var margins = GetMargins(Bounds.size.x, Bounds.size.z, Angle);
-            var x = Random.Range(-3.4f + margins.x / 2, 3.4f - margins.x / 2);
-            var z = Random.Range(-2.4f + margins.y / 2, 2.4f - margins.y / 2);
+            var x = Random.Range(-Settings.Width / 2 + 0.1f + margins.x / 2,
+                Settings.Width / 2 - 0.1f - margins.x / 2);
+            var z = Random.Range(-Settings.Depth / 2 + 0.1f + margins.y / 2,
+                Settings.Depth / 2 - 0.1f - margins.y / 2);
             Position = new Vector3(x, 0, z);
+
+            if (Model.Type.Equals(FurnitureType.Bed) || Model.Type.Equals(FurnitureType.Cabinet))
+                SnapToClosestWall();
         }
 
         // snaps position and angle to closest wall
@@ -57,23 +62,27 @@ namespace Model
             switch (distances.FindIndex(distance => distance.Equals(distances.Min())))
             {
                 case 0: // left
-                    x = -3.4f + margins.x / 2;
-                    z = Random.Range(-2.4f + margins.y / 2, 2.4f - margins.y / 2);
+                    x = -Settings.Width / 2 + 0.1f + margins.x / 2;
+                    z = Random.Range(-Settings.Depth / 2 + 0.1f + margins.y / 2,
+                        Settings.Depth / 2 - 0.1f - margins.y / 2);
                     Angle = -90;
                     break;
                 case 1: // right
-                    x = 3.4f - margins.x / 2;
-                    z = Random.Range(-2.4f + margins.y / 2, 2.4f - margins.y / 2);
+                    x = Settings.Width / 2 - 0.1f - margins.x / 2;
+                    z = Random.Range(-Settings.Depth / 2 + 0.1f + margins.y / 2,
+                        Settings.Depth / 2 - 0.1f - margins.y / 2);
                     Angle = 90;
                     break;
                 case 2: // front
-                    x = Random.Range(-3.4f + margins.x / 2, 3.4f - margins.x / 2);
-                    z = -2.4f + margins.y / 2;
+                    x = Random.Range(-Settings.Width / 2 + 0.1f + margins.x / 2,
+                        Settings.Width / 2 - 0.1f - margins.x / 2);
+                    z = -Settings.Depth / 2 + 0.1f + margins.y / 2;
                     Angle = 180;
                     break;
                 case 3: // back
-                    x = Random.Range(-3.4f + margins.x / 2, 3.4f - margins.x / 2);
-                    z = 2.4f - margins.y / 2;
+                    x = Random.Range(-Settings.Width / 2 + 0.1f + margins.x / 2,
+                        Settings.Width / 2 - 0.1f - margins.x / 2);
+                    z = Settings.Depth / 2 - 0.1f - margins.y / 2;
                     Angle = 0;
                     break;
             }
@@ -105,10 +114,10 @@ namespace Model
         {
             return new List<float>()
             {
-                Math.Abs(Position.x + 3.5f), // left
-                Math.Abs(Position.x - 3.5f), // right
-                Math.Abs(Position.x + 2.5f), // front
-                Math.Abs(Position.x - 2.5f) // back
+                Math.Abs(Position.x + Settings.Width / 2), // left
+                Math.Abs(Position.x - Settings.Width / 2), // right
+                Math.Abs(Position.x + Settings.Depth / 2), // front
+                Math.Abs(Position.x - Settings.Depth / 2) // back
             };
         }
 

@@ -10,12 +10,10 @@ namespace Service
     {
         private List<Chromosome> _population;
         private readonly DataSource _dataSource;
-        private readonly Parameters _parameters;
 
-        public GeneticAlgorithm(DataSource dataSource, Parameters parameters)
+        public GeneticAlgorithm(DataSource dataSource)
         {
             _dataSource = dataSource;
-            _parameters = parameters;
             Populate();
         }
 
@@ -23,20 +21,20 @@ namespace Service
         private void Populate()
         {
             _population = new List<Chromosome>();
-            for (int i = 0; i < _parameters.PopulationSize; i++)
+            for (int i = 0; i < Settings.PopulationSize; i++)
             {
-                _population.Add(new Chromosome(_dataSource, _parameters));
+                _population.Add(new Chromosome(_dataSource));
             }
         }
 
         // runs the genetic algorithm iterations
         public Chromosome GenerateSolution()
         {
-            for (var i = 0; i < _parameters.NumberOfIterations; i++)
+            for (var i = 0; i < Settings.NumberOfIterations; i++)
             {
                 var newPopulation = new List<Chromosome>();
                 var newPopulationMutated = new List<Chromosome>();
-                for (var j = 0; j < _parameters.PopulationSize * 70 / 100; j++)
+                for (var j = 0; j < Settings.PopulationSize * 70 / 100; j++)
                 {
                     var pos = Selection();
                     var candidate = _population[pos];
@@ -47,7 +45,7 @@ namespace Service
                     newPopulationMutated.Add(candidate);
                 }
 
-                for (var j = 0; j < _parameters.PopulationSize * 30 / 100; j++)
+                for (var j = 0; j < Settings.PopulationSize * 30 / 100; j++)
                 {
                     var posA = Random.Range(0, newPopulation.Count);
                     var posB = Random.Range(0, newPopulation.Count);
@@ -56,7 +54,7 @@ namespace Service
 
                     var offspring = newPopulation[posA].Crossover(newPopulation[posB]);
                     offspring.Mutation();
-                    newPopulationMutated.Add(offspring);
+                    newPopulationMutated.Add(offspring.Copy());
                 }
 
                 _population = newPopulationMutated;
@@ -70,7 +68,7 @@ namespace Service
         private int Selection()
         {
             var candidates = new List<int>();
-            for (var i = 0; i < _parameters.NumberOfSelectedIndividuals; i++)
+            for (var i = 0; i < Settings.NumberOfSelectedIndividuals; i++)
             {
                 var rand = Random.Range(0, _population.Count);
                 while (candidates.Contains(rand))
