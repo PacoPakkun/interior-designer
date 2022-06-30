@@ -54,7 +54,7 @@ namespace Service
 
                     var offspring = newPopulation[posA].Crossover(newPopulation[posB]);
                     offspring.Mutation();
-                    newPopulationMutated.Add(offspring.Copy());
+                    newPopulationMutated.Add(offspring);
                 }
 
                 _population = newPopulationMutated;

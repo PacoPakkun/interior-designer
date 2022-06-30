@@ -765,10 +765,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1299594131}
+  - component: {fileID: 1299594132}
   - component: {fileID: 1299594130}
   - component: {fileID: 1299594129}
   - component: {fileID: 1299594128}
-  - component: {fileID: 1299594132}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -878,18 +878,18 @@ MonoBehaviour:
   width: {fileID: 1711464169}
   depth: {fileID: 929617779}
   button: {fileID: 2010972872}
-  numberOfIterations: 100
-  populationSize: 30
-  mutationChance: 0.4
-  numberOfSelectedIndividuals: 5
-  clearanceWeight: 0.7
-  circulationWeight: 0.7
+  numberOfIterations: 80
+  populationSize: 10
+  mutationChance: 0.6
+  numberOfSelectedIndividuals: 3
+  clearanceWeight: 0.8
+  circulationWeight: 0.8
   pairwiseWeight: 1
-  conversationWeight: 1
+  conversationWeight: 0.7
   anglesWeight: 1
-  balanceWeight: 0.7
-  furnitureAlignmentWeight: 0.7
-  wallAlignmentWeight: 0.7
+  balanceWeight: 1
+  furnitureAlignmentWeight: 0.5
+  wallAlignmentWeight: 0.8
 --- !u!1 &1400140041
 GameObject:
   m_ObjectHideFlags: 0

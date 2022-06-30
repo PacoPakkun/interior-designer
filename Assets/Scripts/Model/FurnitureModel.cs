@@ -9,7 +9,7 @@ namespace Model
 
         public FurnitureModel(string name, FurnitureType type)
         {
-            this.Object = Resources.Load($"Models/{name}") as GameObject;
+            this.Object = Resources.Load($"Prefabs/{name}") as GameObject;
             this.Type = type;
         }
     }

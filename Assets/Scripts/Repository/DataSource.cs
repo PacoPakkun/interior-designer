@@ -14,6 +14,7 @@ namespace Repository
         public readonly List<int> Seats = new List<int>();
         public readonly List<int> Tables = new List<int>();
         public readonly List<int> Cabinets = new List<int>();
+        public readonly List<int> Other = new List<int>();
 
         public DataSource()
         {
@@ -54,6 +55,9 @@ namespace Repository
                         break;
                     case FurnitureType.Cabinet:
                         Cabinets.Add(pos);
+                        break;
+                    default:
+                        Other.Add(pos);
                         break;
                 }
         }

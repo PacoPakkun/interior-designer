@@ -10,18 +10,18 @@ public class StartApp : MonoBehaviour
     public InputField depth;
     public Button button;
 
-    public int numberOfIterations = 100;
-    public int populationSize = 40;
-    public double mutationChance = 0.7;
-    public int numberOfSelectedIndividuals = 5;
-    public double clearanceWeight = 1;
-    public double circulationWeight = 1;
-    public double pairwiseWeight = 1;
-    public double conversationWeight = 1;
-    public double anglesWeight = 1;
-    public double balanceWeight = 1;
-    public double furnitureAlignmentWeight = 1;
-    public double wallAlignmentWeight = 1;
+    public int numberOfIterations;
+    public int populationSize;
+    public double mutationChance;
+    public int numberOfSelectedIndividuals;
+    public double clearanceWeight;
+    public double circulationWeight;
+    public double pairwiseWeight;
+    public double conversationWeight;
+    public double anglesWeight;
+    public double balanceWeight;
+    public double furnitureAlignmentWeight;
+    public double wallAlignmentWeight;
 
     // Start is called before the first frame update
     void Start()
@@ -29,23 +29,26 @@ public class StartApp : MonoBehaviour
         button.onClick.AddListener(ButtonHandler);
         width.text = Settings.Width.ToString();
         depth.text = Settings.Depth.ToString();
-
-        Settings.NumberOfIterations = numberOfIterations;
-        Settings.PopulationSize = populationSize;
-        Settings.MutationChance = mutationChance;
-        Settings.NumberOfSelectedIndividuals = numberOfSelectedIndividuals;
-        Settings.ClearanceWeight = clearanceWeight;
-        Settings.CirculationWeight = circulationWeight;
-        Settings.PairwiseWeight = pairwiseWeight;
-        Settings.ConversationWeight = conversationWeight;
-        Settings.AnglesWeight = anglesWeight;
-        Settings.BalanceWeight = balanceWeight;
-        Settings.FurnitureAlignmentWeight = furnitureAlignmentWeight;
-        Settings.WallAlignmentWeight = wallAlignmentWeight;
     }
 
     private void ButtonHandler()
     {
+        if (SceneManager.GetActiveScene().name.Equals("HomeScene"))
+        {
+            Settings.NumberOfIterations = numberOfIterations;
+            Settings.PopulationSize = populationSize;
+            Settings.MutationChance = mutationChance;
+            Settings.NumberOfSelectedIndividuals = numberOfSelectedIndividuals;
+            Settings.ClearanceWeight = clearanceWeight;
+            Settings.CirculationWeight = circulationWeight;
+            Settings.PairwiseWeight = pairwiseWeight;
+            Settings.ConversationWeight = conversationWeight;
+            Settings.AnglesWeight = anglesWeight;
+            Settings.BalanceWeight = balanceWeight;
+            Settings.FurnitureAlignmentWeight = furnitureAlignmentWeight;
+            Settings.WallAlignmentWeight = wallAlignmentWeight;
+        }
+
         Settings.Width = float.Parse(width.text);
         Settings.Depth = float.Parse(depth.text);
         SceneManager.LoadSceneAsync("LoadingScene", LoadSceneMode.Single);

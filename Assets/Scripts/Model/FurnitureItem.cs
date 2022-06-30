@@ -24,6 +24,8 @@ namespace Model
             Model = model;
             Bounds = GetModelBounds(Model.Object);
             ClearanceBounds = GetClearanceBounds(this);
+            Position = Vector3.zero;
+            Angle = 0;
         }
 
         public FurnitureItem Copy()
@@ -34,22 +36,40 @@ namespace Model
 
         public Transform Instantiate()
         {
-            return Object.Instantiate(Model.Object.transform, Position, Quaternion.Euler(new Vector3(-90, Angle, 0)));
+            return Object.Instantiate(Model.Object.transform, Position,
+                Model.Object.transform.rotation * Quaternion.Euler(0, 0, Angle));
         }
 
         // generates a random position and angle for this item
-        public void Randomize()
+        public void Randomize(Vector3 orientationPoint = default)
         {
-            Angle = Random.Range(0f, 90f);
-            var margins = GetMargins(Bounds.size.x, Bounds.size.z, Angle);
+            Vector2 margins;
+            if (Model.Type.Equals(FurnitureType.Seat))
+                margins = Bounds.size.x > Bounds.size.z
+                    ? new Vector2(Bounds.size.x, Bounds.size.x)
+                    : new Vector2(Bounds.size.z, Bounds.size.z);
+            else
+            {
+                Angle = Random.Range(0f, 360f);
+                margins = GetMargins(Bounds.size.x, Bounds.size.z, Angle);
+            }
+
             var x = Random.Range(-Settings.Width / 2 + 0.1f + margins.x / 2,
                 Settings.Width / 2 - 0.1f - margins.x / 2);
             var z = Random.Range(-Settings.Depth / 2 + 0.1f + margins.y / 2,
                 Settings.Depth / 2 - 0.1f - margins.y / 2);
             Position = new Vector3(x, 0, z);
 
-            if (Model.Type.Equals(FurnitureType.Bed) || Model.Type.Equals(FurnitureType.Cabinet))
-                SnapToClosestWall();
+            switch (Model.Type)
+            {
+                case FurnitureType.Bed:
+                case FurnitureType.Cabinet:
+                    SnapToClosestWall();
+                    break;
+                case FurnitureType.Seat:
+                    AlignToPoint(orientationPoint);
+                    break;
+            }
         }
 
         // snaps position and angle to closest wall
@@ -57,31 +77,23 @@ namespace Model
         {
             var margins = GetMargins(Bounds.size.x, Bounds.size.z, 0);
             var distances = GetWallDistances();
-            var x = 0f;
-            var z = 0f;
+            var x = Position.x;
+            var z = Position.z;
             switch (distances.FindIndex(distance => distance.Equals(distances.Min())))
             {
                 case 0: // left
                     x = -Settings.Width / 2 + 0.1f + margins.x / 2;
-                    z = Random.Range(-Settings.Depth / 2 + 0.1f + margins.y / 2,
-                        Settings.Depth / 2 - 0.1f - margins.y / 2);
                     Angle = -90;
                     break;
                 case 1: // right
                     x = Settings.Width / 2 - 0.1f - margins.x / 2;
-                    z = Random.Range(-Settings.Depth / 2 + 0.1f + margins.y / 2,
-                        Settings.Depth / 2 - 0.1f - margins.y / 2);
                     Angle = 90;
                     break;
                 case 2: // front
-                    x = Random.Range(-Settings.Width / 2 + 0.1f + margins.x / 2,
-                        Settings.Width / 2 - 0.1f - margins.x / 2);
                     z = -Settings.Depth / 2 + 0.1f + margins.y / 2;
                     Angle = 180;
                     break;
                 case 3: // back
-                    x = Random.Range(-Settings.Width / 2 + 0.1f + margins.x / 2,
-                        Settings.Width / 2 - 0.1f - margins.x / 2);
                     z = Settings.Depth / 2 - 0.1f - margins.y / 2;
                     Angle = 0;
                     break;
@@ -108,6 +120,11 @@ namespace Model
                     Angle = 0;
                     break;
             }
+        }
+
+        public void AlignToPoint(Vector3 point)
+        {
+            Angle = (float) RadToDeg(Mathf.Atan2(Position.x - point.x, Position.z - point.z));
         }
 
         public List<float> GetWallDistances()

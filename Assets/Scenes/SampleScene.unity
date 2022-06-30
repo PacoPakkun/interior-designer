@@ -357,6 +357,18 @@ MonoBehaviour:
   width: {fileID: 1661179981}
   depth: {fileID: 454503710}
   button: {fileID: 984682531}
+  numberOfIterations: 100
+  populationSize: 40
+  mutationChance: 0.7
+  numberOfSelectedIndividuals: 5
+  clearanceWeight: 1
+  circulationWeight: 1
+  pairwiseWeight: 1
+  conversationWeight: 1
+  anglesWeight: 1
+  balanceWeight: 1
+  furnitureAlignmentWeight: 1
+  wallAlignmentWeight: 1
 --- !u!114 &392263412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -369,19 +381,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f0f899d6d58a2f499b51861d0d97d60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfFurnitureItems: 5
-  numberOfIterations: 10
-  populationSize: 10
-  mutationChance: 0.5
-  numberOfSelectedIndividuals: 3
-  clearanceWeight: 1
-  circulationWeight: 1
-  pairwiseWeight: 1
-  conversationWeight: 1
-  anglesWeight: 1
-  balanceWeight: 1
-  furnitureAlignmentWeight: 1
-  wallAlignmentWeight: 1
 --- !u!1 &397372142
 GameObject:
   m_ObjectHideFlags: 0

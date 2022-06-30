@@ -35,24 +35,23 @@ namespace Service
         private void Init()
         {
             Representation = new List<FurnitureItem>();
-            var bed = _dataSource.Beds[Random.Range(0, _dataSource.Beds.Count)];
+            var table = _dataSource.Tables[Random.Range(0, _dataSource.Tables.Count)];
             var seat1 = _dataSource.Seats[Random.Range(0, _dataSource.Seats.Count)];
             var seat2 = _dataSource.Seats[Random.Range(0, _dataSource.Seats.Count)];
-            var table = _dataSource.Tables[Random.Range(0, _dataSource.Tables.Count)];
-            var cabinet = _dataSource.Cabinets[Random.Range(0, _dataSource.Cabinets.Count)];
-            var randomModels = new List<int>() {bed, seat1, seat2, table, cabinet};
-            for (var i = 5; i < Settings.NumberOfFurnitureItems; i++)
-                randomModels.Add(Random.Range(0, _dataSource.FurnitureModels.Count));
+            var bed = _dataSource.Beds[Random.Range(0, _dataSource.Beds.Count)];
+            var cabinet1 = _dataSource.Cabinets[Random.Range(0, _dataSource.Cabinets.Count)];
+            var cabinet2 = _dataSource.Cabinets[Random.Range(0, _dataSource.Cabinets.Count)];
+            var randomModels = new List<int>() {table, seat1, seat2, bed, cabinet1, cabinet2};
+            for (var i = 6; i < Settings.NumberOfFurnitureItems; i++)
+                randomModels.Add(_dataSource.Other[Random.Range(0, _dataSource.Other.Count)]);
 
             for (var i = 0; i < Settings.NumberOfFurnitureItems; i++)
             {
                 var furnitureItem = new FurnitureItem(_dataSource.FurnitureModels[randomModels[i]]);
-                furnitureItem.Randomize();
-                var tries = 0;
-                while (DoesOverlap(furnitureItem) && tries < 100)
+                for (var tries = 0; tries < 100; tries++)
                 {
-                    furnitureItem.Randomize();
-                    tries++;
+                    furnitureItem.Randomize(i > 0 ? Representation[0].Position : default);
+                    if (!DoesOverlap(furnitureItem)) break;
                 }
 
                 Representation.Add(furnitureItem);
@@ -72,7 +71,7 @@ namespace Service
         //  crossover between 2 chromosomes overlapping at a random position
         public Chromosome Crossover(Chromosome otherChromosome)
         {
-            var pos = (int) (Settings.NumberOfFurnitureItems * (0.4f * Random.value + 0.3f));
+            var pos = (int) (Settings.NumberOfFurnitureItems * (0.4f * Random.value + 0.3f)) + 1;
             var oldRepresentation = Representation.ToList();
 
             Representation = Representation.GetRange(0, pos);
@@ -81,7 +80,7 @@ namespace Service
                     ? otherChromosome.Representation[i].Copy()
                     : oldRepresentation[i].Copy());
 
-            return new Chromosome(_dataSource, Representation.ToList());
+            return Copy();
         }
 
         // chance to make a random change to a furniture alignment
@@ -90,41 +89,42 @@ namespace Service
             if (Random.value > Settings.MutationChance)
                 return;
 
-            var pos = Random.Range(0, Settings.NumberOfFurnitureItems);
+            var pos = (int) (Settings.NumberOfFurnitureItems / (Math.Exp(-5.4f * (Random.value - 0.3f)) + 1));
             var furnitureItem = Representation[pos].Copy();
             Representation.RemoveAt(pos);
 
-            var probability = Random.value;
-            if (probability < 0.2)
+            // chance to change position
+            if (Random.value < 0.8)
             {
-                furnitureItem.Randomize();
-                var tries = 0;
-                while (DoesOverlap(furnitureItem) && tries < 100)
+                for (var tries = 0; tries < 100; tries++)
                 {
-                    furnitureItem.Randomize();
-                    tries++;
+                    furnitureItem.Randomize(Representation[0].Position);
+                    if (!DoesOverlap(furnitureItem)) break;
                 }
             }
+            // chance to align
             else
-            {
-                if (furnitureItem.Model.Type.Equals(FurnitureType.Bed) ||
-                    furnitureItem.Model.Type.Equals(FurnitureType.Cabinet))
-                    furnitureItem.SnapToClosestWall();
-                else
-                    furnitureItem.AlignToClosestWall();
-                var tries = 0;
-                while (DoesOverlap(furnitureItem) && tries < 100)
+                for (var tries = 0; tries < 100; tries++)
                 {
-                    if (furnitureItem.Model.Type.Equals(FurnitureType.Bed) ||
-                        furnitureItem.Model.Type.Equals(FurnitureType.Cabinet))
-                        furnitureItem.SnapToClosestWall();
-                    else
-                        furnitureItem.AlignToClosestWall();
-                    tries++;
+                    furnitureItem.AlignToClosestWall();
+                    if (!DoesOverlap(furnitureItem)) break;
                 }
-            }
 
             Representation.Insert(pos, furnitureItem);
+
+            if (pos == 0)
+                for (pos = 1; pos <= 2; pos++)
+                {
+                    var f = Representation[pos].Copy();
+                    Representation.RemoveAt(pos);
+                    for (var tries = 0; tries < 100; tries++)
+                    {
+                        f.Randomize(furnitureItem.Position);
+                        if (!DoesOverlap(f)) break;
+                    }
+
+                    Representation.Insert(pos, f);
+                }
         }
 
         // calculates overall fitness of furniture layout

@@ -154,7 +154,7 @@ namespace Utils
             if (a.Model.Type.Equals(FurnitureType.Seat) && b.Model.Type.Equals(FurnitureType.Table) ||
                 b.Model.Type.Equals(FurnitureType.Seat) && a.Model.Type.Equals(FurnitureType.Table))
             {
-                return new Tuple<float, float>(1f, 1.3f);
+                return new Tuple<float, float>(0.7f, 1f);
             }
 
             return null;
@@ -165,7 +165,7 @@ namespace Utils
         {
             if (a.Model.Type.Equals(FurnitureType.Seat) && b.Model.Type.Equals(FurnitureType.Seat))
             {
-                return new Tuple<float, float>(1f, 2f);
+                return new Tuple<float, float>(1.5f, 2f);
             }
 
             return null;
@@ -175,9 +175,9 @@ namespace Utils
         public static float PlateauFunction(float distance, float min, float max)
         {
             if (distance < min)
-                return (distance / min) * (distance / min) * (distance / min) * (distance / min);
+                return (float) Math.Pow(distance / min, 10);
             if (distance > max)
-                return (max / distance) * (max / distance) * (max / distance) * (max / distance);
+                return (float) Math.Pow(max / distance, 10);
             return 1;
         }
     }
