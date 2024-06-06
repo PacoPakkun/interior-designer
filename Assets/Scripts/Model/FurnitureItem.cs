@@ -36,6 +36,7 @@ namespace Model
 
         public Transform Instantiate()
         {
+            Model.Object.AddComponent(typeof(DragController));
             return Object.Instantiate(Model.Object.transform, Position,
                 Model.Object.transform.rotation * Quaternion.Euler(0, 0, Angle));
         }
